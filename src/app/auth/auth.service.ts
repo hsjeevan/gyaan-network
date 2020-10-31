@@ -32,7 +32,9 @@ export class AuthService {
         await this.initilizeData(user.email);
         this.isAuthenticated = true;
         this.authChange.next(true);
-        this.router.navigate(['/']);
+        if (this.router.url === '/login' || this.router.url === '/register') {
+          this.router.navigate(['']);
+        }
       } else {
         this.router.navigate(['/login']);
         this.authChange.next(false);

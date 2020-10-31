@@ -6,9 +6,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
-const redirectLoggedInToRegistration = () => redirectLoggedInTo(['']);
+const redirectLoggedInToRegistration = () => redirectLoggedInTo(['register']);
 
 const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, ...canActivate(redirectLoggedInToDashboard) },
   { path: 'register', component: RegisterComponent, ...canActivate(redirectLoggedInToRegistration) },
   { path: 'forgotpassword', component: ForgotPasswordComponent }
