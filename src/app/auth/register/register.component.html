@@ -1,0 +1,127 @@
+<div class="hold-transition register-page">
+  <div class="register-box">
+    <div class="register-logo">
+      <p>Gyaan <span style="font-weight: 400;">Network</span></p>
+    </div>
+
+    <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); " class="card">
+      <div class="card-body register-card-body">
+        <p class="login-box-msg">Register a new membership</p>
+        <form [formGroup]="registrationForm" (ngSubmit)="register()">
+          <div class="input-group mb-3">
+            <input type="text"
+              [class.is-invalid]="registrationForm.get('userName').invalid && registrationForm.get('userName').touched"
+              class="form-control" formControlName="userName" placeholder="Full name">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="registrationForm.get('userName').invalid && registrationForm.get('userName').touched"
+            class="error-text">
+            <small class="text-danger">*Name is required</small>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" formControlName="email"
+              [class.is-invalid]="registrationForm.get('email').invalid && registrationForm.get('email').touched"
+              placeholder="Email" email>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="registrationForm.get('email').invalid && registrationForm.get('email').touched"
+            class="error-text">
+            <small *ngIf="registrationForm.get('email').errors.required" class="text-danger">*Email is
+              required</small>
+            <small *ngIf="registrationForm.get('email').errors.email" class="text-danger">*Email is
+              invalid</small>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="password"
+              [class.is-invalid]="registrationForm.get('password').touched && registrationForm.get('password').invalid"
+              class="form-control" formControlName="password" placeholder="Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="registrationForm.get('password').invalid && registrationForm.get('password').touched"
+            class="error-text">
+            <small class="text-danger">*Password is required</small>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control"
+              [class.is-invalid]="registrationForm.get('confirmPassword').touched && (registrationForm.errors?.misMatch || registrationForm.get('confirmPassword').invalid ) "
+              formControlName="confirmPassword" placeholder="Retype password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="error-text ">
+            <small class="text-danger"
+              *ngIf=" registrationForm.get('confirmPassword').touched && registrationForm.get('confirmPassword').invalid">*This
+              field is required</small>
+            <small class="text-danger" *ngIf="registrationForm.errors?.misMatch">Passwords do not
+              match</small>
+          </div>
+
+          <div class="form-group">
+            <label for="roleOptions" class="text-center">Select Role</label>
+            <select class="form-control pull-right" id="roleOptions" formControlName="role">
+              <option value="student">Student</option>
+              <option value="university">University Representative</option>
+            </select>
+          </div>
+
+          <!-- <div class="row">
+            <div class="col-8">
+              <div class="icheck-primary">
+                <input style="margin-right: 10px;" formControlName="terms" type="checkbox" checked="false"
+                  id="agreeTerms" name="terms" value="false">
+                <label for="agreeTerms">
+                  I agree to the <a href="#">terms</a>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="error-text">
+            <small class="text-danger"
+              *ngIf="registrationForm.get('terms').invalid && registrationForm.get('terms').dirty ">Please
+              indicate that you have read and agree to the Terms and Conditions</small>
+          </div> -->
+
+
+          <div class="col-12">
+            <button type="submit" [disabled]="registrationForm.invalid"
+              class="btn btn-primary btn-block">Register</button>
+          </div>
+
+        </form>
+        <!-- <div class="social-auth-links text-center mb-3">
+                    <p>- OR -</p>
+                    <a (click)="googleLogin()" style="color:white" class="btn btn-block btn-danger">
+                        <i style="padding-right: 5px;" class="fab fa-google-plus-g"></i> Sign Up using Google+
+                    </a>
+                </div> -->
+        <!-- /.social-auth-links -->
+
+        <div style="margin-top: 20px;">
+          <a href="" [routerLink]="['/login']" class="text-center">I already have a membership</a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

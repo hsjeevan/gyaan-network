@@ -1,0 +1,76 @@
+<div class=" login-page">
+  <div class="login-box">
+
+    <div class="login-logo">
+      <p>Gyaan <span style="font-weight: 400;">Network</span></p>
+      <!-- <img class="logoImg" src="../../assets/thinktacLogo.png" alt="Thinktac logo"> -->
+
+    </div>
+
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+
+        <form #loginForm="ngForm" (ngSubmit)="Login()">
+
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              [class.is-invalid]="userEmail.invalid && userEmail.touched" [(ngModel)]="email" #userEmail="ngModel"
+              placeholder="Email" name="email" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="userEmail.errors && userEmail.touched" class="error-text">
+            <small *ngIf="userEmail.errors?.required" class="text-danger">*Email is required</small>
+            <small *ngIf="userEmail.errors?.pattern" class="text-danger">Please enter a valid email</small>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" [class.is-invalid]="userPass.invalid && userPass.touched"
+              #userPass="ngModel" [(ngModel)]="password" placeholder="Password" name="password" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="userPass.invalid && userPass.touched" class="error-text">
+            <small class="text-danger">*Password is required</small>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" [disabled]="loginForm.invalid && loginForm.touched"
+                class="btn btn-primary btn-block">Sign In</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="social-auth-links text-center mb-3">
+          <p>- OR -</p>
+          <a (click)="sendEmailLink()" style="color:white" class="btn btn-block btn-primary">
+
+            <i style="padding-right: 5px;" class="fas fa-envelope"></i> Sign in using
+            Email Link
+          </a>
+          <a (click)="googleLogin()" style="color:white" class="btn btn-block btn-danger">
+            <i style="padding-right: 5px;" class="fab fa-google-plus-g"></i> Sign in using Google+
+          </a>
+        </div>
+
+
+        <p class="mb-1">
+          <a href="" [routerLink]="['/forgotpassword']">I forgot my password</a>
+        </p>
+        <p class="mb-0">
+          <a href="" [routerLink]="['/register']" class="text-center">Register a new membership</a>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</div>

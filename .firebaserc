@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "side-hustle-jeevan": {
+      "hosting": {
+        "gyaan-network": [
+          "side-hustle-jeevan"
+        ]
+      }
+    }
+  }
+}
