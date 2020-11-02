@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { UiService } from '../services/shared/ui.service';
 
 @Injectable({
@@ -13,12 +13,9 @@ import { UiService } from '../services/shared/ui.service';
 export class AuthService {
 
   authChange = new Subject<boolean>();
-  private isAuthenticated = false;
+  public isAuthenticated = false;
 
-  roles = {
-    student: false,
-    university: false
-  };
+  userSub = new ReplaySubject(1);
 
   // user: User;
   // authState: auth.UserCredential;
@@ -31,14 +28,16 @@ export class AuthService {
       if (user) {
         await this.initilizeData(user.email);
         this.isAuthenticated = true;
+        this.userSub.next(user);
         this.authChange.next(true);
         if (this.router.url === '/login' || this.router.url === '/register') {
           this.router.navigate(['']);
         }
       } else {
-        this.router.navigate(['/login']);
+        this.userSub.next(null);
         this.authChange.next(false);
         this.isAuthenticated = false;
+        this.router.navigate(['/login']);
       }
     });
   }
@@ -52,8 +51,7 @@ export class AuthService {
           photoURL
         }).then(async () => {
           this.uiService.loadingStateChanged.next(false);
-          this.roles[authData.role] = true;
-          await this.createUser(result.user, photoURL, this.roles);
+          await this.createUser(result.user, photoURL, authData.role);
         });
 
       })
@@ -64,7 +62,7 @@ export class AuthService {
   }
 
   createUser(user, photo = '', role) {
-    return this.afs.doc(`Users/${user.uid}`).set({
+    return this.afs.doc(`GyaanUsers/${user.uid}`).set({
       displayName: user.displayName,
       uid: user.uid,
       email: user.email,
@@ -74,7 +72,7 @@ export class AuthService {
   }
 
   updateUserData(user) {
-    return this.afs.doc(`Users/${user.uid}`).set(user, { merge: true });
+    return this.afs.doc(`GyaanUsers/${user.uid}`).set(user, { merge: true });
   }
 
   login(authData: any) {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +10,11 @@ import { AuthService } from '../auth/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private userService: UserService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<any> {
+    const user: any = await this.authService.userSub.pipe(take(1)).toPromise();
+    this.userService.getUserDoc();
   }
 
 }
