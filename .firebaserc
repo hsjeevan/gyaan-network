@@ -3,9 +3,12 @@
     "side-hustle-jeevan": {
       "hosting": {
         "gyaan-network": [
-          "side-hustle-jeevan"
+          "gyaan-network"
         ]
       }
     }
+  },
+  "projects": {
+    "side-hustle": "side-hustle-jeevan"
   }
 }
