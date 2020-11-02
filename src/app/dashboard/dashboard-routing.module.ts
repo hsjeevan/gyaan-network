@@ -30,6 +30,10 @@ const routes: Routes = [
         canActivate: [RoleGuard], data: {
           role: 'university'
         }
+      },
+      {
+        path: '**', component: StudentComponent
+
       }
     ]
   }

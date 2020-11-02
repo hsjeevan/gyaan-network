@@ -14,19 +14,15 @@ export class UserService {
 
   async getUserDoc() {
     const user = await this.afAuth.user.pipe(take(1)).toPromise();
-    this.afs.collection('GyaanUsers').doc(user.uid).valueChanges().subscribe(userDoc => {
-      this.userDocSub.next(userDoc);
-    });
+    if (user) {
+      this.afs.collection('GyaanUsers').doc(user.uid).valueChanges().subscribe(userDoc => {
+        this.userDocSub.next(userDoc);
+      });
+    }
   }
   getUserRole() {
     return this.userDocSub.pipe(take(1)).toPromise().then((user: any) => {
       return user.role;
     });
-    // const keys = Object.keys(userDoc?.role);
-
-    // const filtered = keys.filter((key) => userDoc?.role[key]).sort();
-    // console.log(filtered);
-
-    // return userDoc.role;
   }
 }

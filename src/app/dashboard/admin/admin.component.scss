@@ -1,0 +1,11 @@
+.iconClass {
+  &:hover {
+    color: red;
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+  &:active {
+    color: darken($color: red, $amount: 10);
+    transform: scale(1);
+  }
+}

@@ -1,1 +1,76 @@
-<p>admin works!</p>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+
+        <!-- Profile Image -->
+        <div class="card card-dark card-outline">
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <img class="profile-user-img img-fluid img-circle" [src]="userProfile?.photoURL"
+                alt="User profile picture">
+            </div>
+
+            <h3 class="profile-username text-center">{{userProfile?.displayName |titlecase}}</h3>
+
+            <p class="text-muted text-center">{{userProfile?.role |titlecase}}</p>
+
+
+            <!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+      </div>
+      <!-- /.col -->
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Gyaan Network Users</h3>
+
+            <div class="card-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control float-right"
+                  (input)="search($event.target.value)" placeholder="Search">
+
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body table-responsive p-0">
+            <table class="table table-head-fixed">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of searchedList">
+                  <td>{{user?.displayName}}</td>
+                  <td>{{user?.email}}</td>
+                  <td>{{user?.role}}</td>
+                  <td style="width: 16.66%">{{user?.blocked % 2 ==0 ? 'Not Blocked': 'Blocked'}}</td>
+                  <td>
+                    <i class="iconClass" [ngClass]="user?.blocked % 2 ==0 ?'fas fa-lock' :'fas fa-lock-open' "
+                      data-toggle="tooltip" data-placement="top"
+                      title="{{user?.blocked % 2 ==0 ?'Lock User' :'Unlock User'}}" (click)="
+                      increment(user)"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.nav-tabs-custom -->
+  </div>
+  <!-- /.col -->
+</section>

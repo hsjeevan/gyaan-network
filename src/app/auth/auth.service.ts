@@ -26,10 +26,10 @@ export class AuthService {
   async initAuthListener(): Promise<any> {
     await this.afAuth.authState.subscribe(async user => {
       if (user) {
-        await this.initilizeData(user.email);
         this.isAuthenticated = true;
         this.userSub.next(user);
         this.authChange.next(true);
+
         if (this.router.url === '/login' || this.router.url === '/register') {
           this.router.navigate(['']);
         }
@@ -67,7 +67,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       photoURL: user.photoURL || photo,
-      role
+      role,
+      blocked: 0
     }, { merge: true });
   }
 
@@ -104,7 +105,11 @@ export class AuthService {
         });
       } else {
         // your sign in flow
-        // await this.createUser(result.user);
+        await this.updateUserData({
+          uid: result.user.uid,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL || `https://ui-avatars.com/api/?name=${result.user.displayName.split(' ').join('+')}`
+        });
       }
     })
       .catch(error => {
@@ -113,7 +118,8 @@ export class AuthService {
       });
   }
   logout() {
-    this.afAuth.signOut().then(() => this.router.navigate(['/login']));
+    this.afAuth.signOut()
+    // .then(() => this.router.navigate(['/login']));
   }
 
 
@@ -154,6 +160,12 @@ export class AuthService {
 
         // Signin user and remove the email localStorage
         const result = await this.afAuth.signInWithEmailLink(email, url);
+        const isNewUser = result.additionalUserInfo.isNewUser;
+        if (isNewUser) {
+          result.user.delete().then(() => {
+            this.router.navigate(['/register']);
+          });
+        }
         window.localStorage.removeItem('emailForSignIn');
       }
     } catch (err) {

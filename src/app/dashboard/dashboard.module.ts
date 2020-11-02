@@ -6,11 +6,12 @@ import { AdminComponent } from './admin/admin.component';
 import { StudentComponent } from './student/student.component';
 import { UniversityComponent } from './university/university.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ AdminComponent, StudentComponent, UniversityComponent, DashboardComponent],
   imports: [
+    FormsModule,
     CommonModule,
     DashboardRoutingModule
   ]

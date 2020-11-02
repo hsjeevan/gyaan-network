@@ -29,8 +29,6 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
-      this.uiService.showSnackbar(JSON.stringify(this.registrationForm.value), null, 3000);
       this.authService.registerUser(this.registrationForm.value);
     }
     else {

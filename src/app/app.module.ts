@@ -12,7 +12,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DashboardModule } from './dashboard/dashboard.module';
-
 @NgModule({
   declarations: [
     AppComponent

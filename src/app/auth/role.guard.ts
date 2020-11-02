@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from '../services/user.service';
-import { take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 
@@ -18,6 +17,8 @@ export class RoleGuard implements CanActivate {
     const expectedRole = route.data.role;
     if (this.authService.isAuthenticated) {
       return this.userService.getUserRole().then(userRole => {
+        // console.log(userRole.blocked % 2 === 0);
+
         if (expectedRole === userRole) {
           return Promise.resolve(true);
         }
