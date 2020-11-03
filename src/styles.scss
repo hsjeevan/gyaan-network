@@ -44,3 +44,11 @@ $theme-colors: (
   "primary": #204497 // "primary": #ffc0cb,
 );
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+//Helps in auto scrolling
+.mess {
+  display: flex;
+  flex-direction: column-reverse;
+  bottom: 0 !important;
+  padding: 1%;
+}

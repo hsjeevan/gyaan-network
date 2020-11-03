@@ -33,7 +33,7 @@ export class StudentComponent implements OnInit {
       this.chatSub.unsubscribe();
     }
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
-      this.chatMessages = data?.Messages;
+      this.chatMessages = data?.Messages || [];
     });
   }
 
@@ -42,14 +42,15 @@ export class StudentComponent implements OnInit {
     const { displayName, email, photoURL, uid } = this.selectedUser;
     const chatID = this.currentUser.uid > uid ? this.currentUser.uid + uid : uid + this.currentUser.uid;
     const data = {
-      reciever: { displayName, email, photoURL, uid },
       text: this.text,
+      sender: this.currentUser.uid,
       time: new Date(),
-      sender: this.currentUser.uid
     };
-
+    const messageData = {
+      Messages: firebase.firestore.FieldValue.arrayUnion(data)
+    };
     this.afs.collection('GyaanConversations').doc(chatID)
-      .set({ Messages: firebase.firestore.FieldValue.arrayUnion(data) }, { merge: true }).then(() => this.text = '');
+      .set(messageData, { merge: true }).then(() => this.text = '');
   }
 
   getUniversities() {

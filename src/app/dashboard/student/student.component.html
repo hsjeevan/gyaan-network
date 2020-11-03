@@ -17,6 +17,8 @@
                   <h6 class="mb-0">{{university?.displayName}}</h6>
                   <small class="small font-weight-bold">{{university.role | titlecase}}</small>
                 </div>
+                <p class="font-italic mb-0 text-small">{{university?.email}}</p>
+
               </div>
             </div>
           </a>
@@ -29,20 +31,20 @@
   <div class="col-7 px-0 ">
     <div class="px-4 py-5 chat-box bg-white overflow-auto mess" style="max-height: 75vh;">
 
-      <div *ngFor="let chat of chatMessages?.reverse()" class="media w-50 mb-3 "
-        [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''">
-        <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
-          <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="chat.reciever.photoURL" alt="user" width="50"
-            class="rounded-circle">
+      <div *ngFor="let chat of chatMessages.reverse()" class="media w-50 mb-3 "
+      [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''"> <!-- Current user to right -->
+      <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
+        <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="selectedUser.photoURL" alt="user" width="50"
+          class="rounded-circle"><!-- show image if not current user -->
 
-          <div class=" rounded py-2 px-3 mb-2" [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
-            <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
-              {{chat.text}}</p>
-          </div>
-          <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} | {{chat.time.seconds*1000 |date}}
-          </p>
+        <div class=" rounded py-2 px-3 mb-2" [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
+          <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
+            {{chat.text}}</p>
         </div>
+        <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} | {{chat.time.seconds*1000 |date}}
+        </p>
       </div>
+    </div>
 
 
     </div>
