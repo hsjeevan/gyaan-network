@@ -1,5 +1,6 @@
-# Gyaan Network
+#Welcome to Gyaan-Network
 
-`ng build --prod --aot`
 
-`firebase deploy --only hosting:gyaan-network`
+Admin Account: 
+ID: admin@gyaannetwork.com
+Pass: admin123
