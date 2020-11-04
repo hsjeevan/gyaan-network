@@ -38,29 +38,26 @@
       </div>
     </div>
     <div class="flexbox-item chat-panel">
-      <div class="messages_content">
-        <div class="px-4 py-5 chat-box bg-white overflow-auto mess" style="height: 100%;">
+      <div class="messages_content px-4 py-5  chat-box  bg-white overflow-auto mess">
 
-          <div *ngFor="let chat of chatMessages?.reverse()" class="media w-50 mb-3 "
-            [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''">
-            <!-- Current user to right -->
-            <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
-              <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="selectedUser.photoURL" alt="user" width="50"
-                class="rounded-circle"><!-- show image if not current user -->
+        <div *ngFor="let chat of chatMessages" class="media w-50 mb-3 "
+          [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''">
+          <!-- Current user to right -->
+          <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
+            <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="selectedUser.photoURL" alt="user" width="50"
+              class="rounded-circle"><!-- show image if not current user -->
 
-              <div class=" rounded py-2 px-3 mb-2"
-                [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
-                <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
-                  {{chat.text}}</p>
-              </div>
-              <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} |
-                {{chat.time.seconds*1000 |date}}
-              </p>
+            <div class=" rounded py-2 px-3 mb-2" [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
+              <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
+                {{chat.text}}</p>
             </div>
+            <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} |
+              {{chat.time.seconds*1000 |date}}
+            </p>
           </div>
-
-
         </div>
+
+
       </div>
       <div class="message_footer">
         <form #f="ngForm" (ngSubmit)="writeChat()" class="bg-light">

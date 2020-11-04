@@ -15,7 +15,7 @@ export class StudentComponent implements OnInit, OnDestroy {
   universities: any = [];
   currentUser: any;
   chatSub: Subscription;
-  chatMessages: any;
+  chatMessages: any = [];
   selectedUser: any;
   text = '';
   subscriptions: Subscription[] = [];
@@ -37,7 +37,9 @@ export class StudentComponent implements OnInit, OnDestroy {
       this.chatSub.unsubscribe();
     }
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
-      this.chatMessages = data?.Messages || [];
+      console.log('Here');
+
+      this.chatMessages = data?.Messages?.reverse() || [];
     });
     this.subscriptions.push(this.chatSub);
   }

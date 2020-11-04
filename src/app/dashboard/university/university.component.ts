@@ -18,7 +18,7 @@ export class UniversityComponent implements OnInit, OnDestroy {
   students: any = [];
   currentUser: any;
   chatSub: Subscription;
-  chatMessages: any;
+  chatMessages: any = [];
   selectedUser: any;
   text = '';
   constructor(private afs: AngularFirestore, private userService: UserService) { }
@@ -35,7 +35,7 @@ export class UniversityComponent implements OnInit, OnDestroy {
       this.chatSub.unsubscribe();
     }
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
-      this.chatMessages = data?.Messages || [];
+      this.chatMessages = data?.Messages?.reverse() || [];
     });
     this.subscriptions.push(this.chatSub);
   }

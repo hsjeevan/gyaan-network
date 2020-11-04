@@ -41,7 +41,7 @@ body {
 }
 
 $theme-colors: (
-  "primary": #204497 // "primary": #ffc0cb,
+  "primary": #204497 // "primary": #ffc0cb,,,,,,
 );
 @import "../node_modules/bootstrap/scss/bootstrap";
 
@@ -49,8 +49,8 @@ $theme-colors: (
 .mess {
   display: flex;
   flex-direction: column-reverse;
-  bottom: 0 !important;
-  padding: 1%;
+  // bottom: 0 !important;
+  // padding: 1%;
 }
 
 .flexbox-container {
@@ -81,13 +81,10 @@ $theme-colors: (
   display: flex;
   flex-direction: column;
   flex: 2 0 0%;
-  flex-flow: column nowrap;
+  // flex-flow: column nowrap;
   & > .messages_content {
     flex: 1;
     overflow: auto;
-    display: flex;
-    flex-direction: column-reverse;
-    bottom: 0 !important;
   }
   & > .message_footer {
     flex: 0 0 5%;
