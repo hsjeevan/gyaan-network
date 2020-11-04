@@ -15,8 +15,8 @@ export class AdminComponent implements OnInit {
   searchedList: any;
   constructor(private userService: UserService, private afs: AngularFirestore) { }
 
-  async ngOnInit(): Promise<void> {
-    this.userProfile = await this.userService.userDocSub.pipe(take(1)).toPromise();
+  ngOnInit(): any {
+    this.userService.userDocSub.subscribe(data => this.userProfile = data);
     this.getUsers();
   }
 

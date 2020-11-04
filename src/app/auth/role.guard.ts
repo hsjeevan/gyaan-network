@@ -23,7 +23,7 @@ export class RoleGuard implements CanActivate {
           return Promise.resolve(true);
         }
         this.router.navigate([`dashboard/${userRole}`]);
-        return Promise.resolve(false);
+        // return Promise.resolve(false);
       });
 
     } else {

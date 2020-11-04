@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 
 import { ReplaySubject, Subject } from 'rxjs';
 import { UiService } from '../services/shared/ui.service';
+import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,11 @@ export class AuthService {
   // authState: auth.UserCredential;
   // state: any = null;
 
-  constructor(public afAuth: AngularFireAuth, public router: Router, private uiService: UiService, private afs: AngularFirestore) { }
+  constructor(public afAuth: AngularFireAuth,
+    public router: Router,
+    private uiService: UiService,
+    private afs: AngularFirestore,
+    private userService: UserService) { }
 
   async initAuthListener(): Promise<any> {
     await this.afAuth.authState.subscribe(async user => {
@@ -29,7 +34,7 @@ export class AuthService {
         this.isAuthenticated = true;
         this.userSub.next(user);
         this.authChange.next(true);
-
+        this.userService.getUserDoc();
         if (this.router.url === '/login' || this.router.url === '/register') {
           this.router.navigate(['']);
         }
