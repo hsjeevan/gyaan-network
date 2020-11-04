@@ -42,7 +42,7 @@ export class AuthService {
         this.userSub.next(null);
         this.authChange.next(false);
         this.isAuthenticated = false;
-        this.userService.userDocSub.next('');
+        // this.userService.userDocSub.next('');
         this.router.navigate(['/login']);
       }
     });
