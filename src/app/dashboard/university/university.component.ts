@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription } from 'rxjs';
 import firebase from 'firebase';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
-import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-university',
@@ -22,10 +22,9 @@ export class UniversityComponent implements OnInit {
   text = '';
   constructor(private afs: AngularFirestore, private userService: UserService) { }
 
-  async ngOnInit(): Promise<any> {
+  ngOnInit(): any {
     this.userService.userDocSub.subscribe(data => { this.currentUser = data; });
     this.getStudents();
-
   }
 
   getChat(user) {
@@ -35,7 +34,7 @@ export class UniversityComponent implements OnInit {
       this.chatSub.unsubscribe();
     }
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
-      this.chatMessages = data?.Messages;
+      this.chatMessages = data?.Messages || [];
     });
   }
 

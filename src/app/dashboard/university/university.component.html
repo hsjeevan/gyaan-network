@@ -1,62 +1,80 @@
 <div class="row rounded-lg shadow " style="height: 79vh;">
   <!-- Users box-->
-  <div class="col-5 px-0">
-    <div class="bg-white">
 
-      <div class="bg-gray px-4 py-2 bg-dark">
-        <p class="h5 mb-0 py-1">Students</p>
-      </div>
-      <div class="messages-box">
-        <div class="list-group rounded-0">
-          <a class="list-group-item list-group-item-action  rounded-0 "
-            [ngClass]="student.uid === selectedUser.uid ? 'active text-white': 'text-secondary'"
-            *ngFor="let student of students; let i= index" (click)="getChat(student)">
-            <div class="media"><img src="{{student?.photoURL}}" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-4">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                  <h6 class="mb-0">{{student?.displayName}}</h6>
-                  <small class="small font-weight-bold">{{student.role | titlecase}}</small>
-                </div>
-                <p class="font-italic mb-0 text-small">{{student?.email}}</p>
-              </div>
+
+  <div class="flexbox-container">
+    <div class="flexbox-item left-panel">
+      <div class="profile">
+        <div class="bg-gray px-4 py-2 bg-light">
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <img class="profile-user-img img-fluid img-circle" [src]="currentUser?.photoURL"
+                alt="User profile picture">
             </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Chat Box-->
-
-  <div class="col-7 px-0 ">
-    <div class="px-4 py-5 chat-box bg-white overflow-auto mess" style="max-height: 75vh;">
-
-      <div *ngFor="let chat of chatMessages.reverse()" class="media w-50 mb-3 "
-        [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''"> <!-- Current user to right -->
-        <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
-          <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="selectedUser.photoURL" alt="user" width="50"
-            class="rounded-circle"><!-- show image if not current user -->
-
-          <div class=" rounded py-2 px-3 mb-2" [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
-            <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
-              {{chat.text}}</p>
+            <h3 class="profile-username text-dark text-center">{{currentUser?.displayName }}</h3>
+            <p class="text-muted text-center">{{currentUser?.role |titlecase}}</p>
           </div>
-          <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} | {{chat.time.seconds*1000 |date}}
-          </p>
+        </div>
+        <p class="h5 mb-0 py-1 text-center">Students</p>
+      </div>
+      <div class="users">
+        <div class="messages-box">
+          <div class="list-group rounded-0">
+            <a class="list-group-item list-group-item-action  rounded-0 "
+              [ngClass]="student.uid === selectedUser.uid ? 'active text-white': 'text-secondary'"
+              *ngFor="let student of students; let i= index" (click)="getChat(student)">
+              <div class="media"><img src="{{student?.photoURL}}" alt="user" width="50" class="rounded-circle">
+                <div class="media-body ml-4">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <h6 class="mb-0">{{student?.displayName}}</h6>
+                    <small class="small font-weight-bold">{{student.role | titlecase}}</small>
+                  </div>
+                  <p class="font-italic mb-0 text-small">{{student?.email}}</p>
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
-
-
     </div>
-    <!-- Typing area -->
-    <form #f="ngForm" (ngSubmit)="writeChat()" class="bg-light">
-      <div class="input-group">
-        <input type="text" placeholder="Type a message" aria-describedby="button-addon2" [(ngModel)]="text"
-          [ngModelOptions]="{standalone: true}" class="form-control rounded-0 border-0 py-4 bg-light">
-        <div class="input-group-append">
-          <button id="button-addon2" type="submit" [disabled]='!text' class="btn btn-link"> <i
-              class="fa fa-paper-plane"></i></button>
+    <div class="flexbox-item chat-panel">
+      <div class="messages_content">
+        <div class="px-4 py-5 chat-box bg-white overflow-auto mess" style="height: 100%;">
+
+          <div *ngFor="let chat of chatMessages.reverse()" class="media w-50 mb-3 "
+            [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''">
+            <!-- Current user to right -->
+            <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">
+              <img *ngIf="!(currentUser?.uid == chat?.sender)" [src]="selectedUser.photoURL" alt="user" width="50"
+                class="rounded-circle"><!-- show image if not current user -->
+
+              <div class=" rounded py-2 px-3 mb-2"
+                [ngClass]="currentUser?.uid == chat?.sender? 'bg-primary': 'bg-light'">
+                <p class="text-small mb-0 " [ngClass]="currentUser?.uid == chat?.sender? 'text-white': 'text-muted'">
+                  {{chat.text}}</p>
+              </div>
+              <p class="small text-muted">{{chat.time.seconds*1000 |date:'shortTime'}} |
+                {{chat.time.seconds*1000 |date}}
+              </p>
+            </div>
+          </div>
+
+
         </div>
       </div>
-    </form>
+      <div class="message_footer">
+        <form #f="ngForm" (ngSubmit)="writeChat()" class="bg-light">
+          <div class="input-group">
+            <input type="text" placeholder="Type a message" aria-describedby="button-addon2" [(ngModel)]="text"
+              [ngModelOptions]="{standalone: true}" class="form-control rounded-0 border-0 py-4 bg-light">
+            <div class="input-group-append">
+              <button id="button-addon2" type="submit" [disabled]='!text' class="btn btn-link"> <i
+                  class="fa fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
+
 </div>

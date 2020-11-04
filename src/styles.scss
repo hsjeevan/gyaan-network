@@ -52,3 +52,44 @@ $theme-colors: (
   bottom: 0 !important;
   padding: 1%;
 }
+
+.flexbox-container {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  width: 100%;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #5d5d5d;
+  flex: 1;
+
+  & > .profile {
+    flex: 1 0 10%;
+  }
+
+  & > .users {
+    flex: 2 0 0;
+    overflow: auto;
+  }
+}
+
+.chat-panel {
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 2 0 0%;
+  flex-flow: column nowrap;
+  & > .messages_content {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    bottom: 0 !important;
+  }
+  & > .message_footer {
+    flex: 0 0 5%;
+  }
+}

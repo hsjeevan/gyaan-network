@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription } from 'rxjs';
 import firebase from 'firebase';
-import { map, take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-student',
@@ -20,8 +20,10 @@ export class StudentComponent implements OnInit {
   text = '';
   constructor(private afs: AngularFirestore, private userService: UserService) { }
 
-  async ngOnInit(): Promise<any> {
-    this.currentUser = await this.userService.userDocSub.pipe(take(1)).toPromise();
+  ngOnInit(): any {
+    this.userService.userDocSub.subscribe(data => {
+      this.currentUser = data;
+    });
     this.getUniversities();
 
   }
