@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
 import { Subscription } from 'rxjs';
@@ -10,8 +10,9 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './university.component.html',
   styleUrls: ['./university.component.scss']
 })
-export class UniversityComponent implements OnInit {
+export class UniversityComponent implements OnInit, OnDestroy {
 
+  subscriptions: Subscription[] = [];
 
   searchedList: any = [];
   students: any = [];
@@ -23,7 +24,7 @@ export class UniversityComponent implements OnInit {
   constructor(private afs: AngularFirestore, private userService: UserService) { }
 
   ngOnInit(): any {
-    this.userService.userDocSub.subscribe(data => { this.currentUser = data; });
+    this.subscriptions.push(this.userService.userDocSub.subscribe(data => { this.currentUser = data; }));
     this.getStudents();
   }
 
@@ -36,6 +37,7 @@ export class UniversityComponent implements OnInit {
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
       this.chatMessages = data?.Messages || [];
     });
+    this.subscriptions.push(this.chatSub);
   }
 
 
@@ -65,21 +67,22 @@ export class UniversityComponent implements OnInit {
   }
 
   getStudents() {
-    this.afs.collection('GyaanUsers', ref => ref.where('role', 'not-in', ['admin', 'university'])).stateChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as any;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    ).subscribe(data => {
-      if (data.length > this.students.length) {
-        this.students = this.mergeArr(data, this.students);
-      } else {
-        this.students = this.mergeArr(this.students, data);
-      }
-      this.searchedList = this.students;
-      this.getChat(this.students[0]);
-    });
+    this.subscriptions.push(this.afs.collection('GyaanUsers',
+      ref => ref.where('role', 'not-in', ['admin', 'university'])).stateChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      ).subscribe(data => {
+        if (data.length > this.students.length) {
+          this.students = this.mergeArr(data, this.students);
+        } else {
+          this.students = this.mergeArr(this.students, data);
+        }
+        this.searchedList = this.students;
+        this.getChat(this.students[0]);
+      }));
   }
 
   mergeArr(a1, a2) {
@@ -94,5 +97,9 @@ export class UniversityComponent implements OnInit {
       // val.email.toLowerCase().includes(value.toLowerCase()) ||
       // val.role.toLowerCase().includes(value.toLowerCase())
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => { if (subscription) { subscription.unsubscribe(); } });
   }
 }

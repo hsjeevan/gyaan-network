@@ -1,27 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, take } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import firebase from 'firebase';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   userProfile: any;
   usersArr = [];
   searchedList: any;
+  subscriptions: Subscription[] = [];
+
   constructor(private userService: UserService, private afs: AngularFirestore) { }
 
   ngOnInit(): any {
-    this.userService.userDocSub.subscribe(data => this.userProfile = data);
+    this.subscriptions.push(this.userService.userDocSub.subscribe(data => this.userProfile = data));
     this.getUsers();
   }
 
   getUsers() {
-    this.afs.collection('GyaanUsers', ref => ref.where('role', '!=', 'admin')).stateChanges().pipe(
+    this.subscriptions.push(this.afs.collection('GyaanUsers', ref => ref.where('role', '!=', 'admin')).stateChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as any;
         const id = a.payload.doc.id;
@@ -34,7 +37,7 @@ export class AdminComponent implements OnInit {
         this.usersArr = this.mergeArr(this.usersArr, data);
       }
       this.searchedList = this.usersArr;
-    });
+    }));
   }
 
   increment(user) {
@@ -51,6 +54,10 @@ export class AdminComponent implements OnInit {
 
   mergeArr(a1, a2) {
     return a1.map(t1 => ({ ...t1, ...a2.find(t2 => t2.id === t1.id) }));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => { if (subscription) { subscription.unsubscribe(); } });
   }
 
 }

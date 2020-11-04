@@ -127,6 +127,7 @@ export class AuthService {
   }
   logout() {
     this.userService.userDocSub.next(null);
+    this.userService.onDestoy();
     this.afAuth.signOut();
     // .then(() => this.router.navigate(['/login']));
   }

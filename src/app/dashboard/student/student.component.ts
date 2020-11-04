@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './student.component.html',
   styleUrls: ['./student.component.scss']
 })
-export class StudentComponent implements OnInit {
+export class StudentComponent implements OnInit, OnDestroy {
 
   searchedList: any = [];
   universities: any = [];
@@ -18,12 +18,14 @@ export class StudentComponent implements OnInit {
   chatMessages: any;
   selectedUser: any;
   text = '';
+  subscriptions: Subscription[] = [];
+
   constructor(private afs: AngularFirestore, private userService: UserService) { }
 
   ngOnInit(): any {
-    this.userService.userDocSub.subscribe(data => {
+    this.subscriptions.push(this.userService.userDocSub.subscribe(data => {
       this.currentUser = data;
-    });
+    }));
     this.getUniversities();
 
   }
@@ -37,6 +39,7 @@ export class StudentComponent implements OnInit {
     this.chatSub = this.afs.collection('GyaanConversations').doc(chatID).valueChanges().subscribe((data: any) => {
       this.chatMessages = data?.Messages || [];
     });
+    this.subscriptions.push(this.chatSub);
   }
 
 
@@ -56,7 +59,7 @@ export class StudentComponent implements OnInit {
   }
 
   getUniversities() {
-    this.afs.collection('GyaanUsers', ref => ref.where('role', 'not-in', ['admin', 'student'])).stateChanges().pipe(
+    this.subscriptions.push(this.afs.collection('GyaanUsers', ref => ref.where('role', 'not-in', ['admin', 'student'])).stateChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as any;
         const id = a.payload.doc.id;
@@ -70,7 +73,7 @@ export class StudentComponent implements OnInit {
       }
       this.searchedList = this.universities;
       this.getChat(this.universities[0]);
-    });
+    }));
   }
 
   mergeArr(a1, a2) {
@@ -85,5 +88,9 @@ export class StudentComponent implements OnInit {
       // val.email.toLowerCase().includes(value.toLowerCase()) ||
       // val.role.toLowerCase().includes(value.toLowerCase())
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => { if (subscription) { subscription.unsubscribe(); } });
   }
 }

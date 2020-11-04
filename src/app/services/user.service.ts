@@ -9,16 +9,18 @@ import { take } from 'rxjs/operators';
 })
 export class UserService {
   userDocSub = new ReplaySubject(1);
-  subs = Subscription;
+  subscriptions: Subscription[] = [];
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) { this.getUserDoc(); }
 
   async getUserDoc() {
     const user = await this.afAuth.user.pipe(take(1)).toPromise();
     if (user) {
-      this.afs.collection('GyaanUsers').doc(user.uid).valueChanges().subscribe(userDoc => {
-        this.userDocSub.next(userDoc);
-      });
+      this.subscriptions.push(this.afs.collection('GyaanUsers').doc(user.uid).valueChanges().subscribe(userDoc => {
+        if (userDoc) {
+          this.userDocSub.next(userDoc);
+        }
+      }));
     }
   }
   getUserRole() {
@@ -30,10 +32,9 @@ export class UserService {
         }
       });
     });
+  }
 
-
-    // return this.userDocSub.pipe(take(1)).toPromise().then((user: any) => {
-    //   return user?.role;
-    // });
+  onDestoy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
