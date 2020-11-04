@@ -8,7 +8,7 @@
 
 </nav>
 <div class="jumbotron mb-0" style="min-height: 92.5vh;">
-  <div class="container" *ngIf="user.blocked % 2 === 0; else blocked">
+  <div class="container" *ngIf="user?.blocked % 2 === 0; else blocked">
     <router-outlet></router-outlet>
   </div>
 

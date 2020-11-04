@@ -28,8 +28,8 @@ export class AuthService {
     private afs: AngularFirestore,
     private userService: UserService) { }
 
-  async initAuthListener(): Promise<any> {
-    await this.afAuth.authState.subscribe(async user => {
+  initAuthListener(): any {
+    this.afAuth.authState.subscribe(async user => {
       if (user) {
         this.userService.getUserDoc();
         this.isAuthenticated = true;
@@ -59,7 +59,8 @@ export class AuthService {
         }).then(async () => {
           this.uiService.loadingStateChanged.next(false);
           await this.createUser(result.user, photoURL, authData.role);
-        });
+        }).then(() =>
+          this.router.navigate(['/dashboard', authData?.role]));
 
       })
       .catch(error => {

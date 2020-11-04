@@ -41,7 +41,7 @@
       <div class="messages_content">
         <div class="px-4 py-5 chat-box bg-white overflow-auto mess"  style="height: 100%;">
 
-          <div *ngFor="let chat of chatMessages.reverse()" class="media w-50  "
+          <div *ngFor="let chat of chatMessages?.reverse()" class="media w-50  "
             [ngClass]="currentUser?.uid == chat?.sender ? ' ml-auto' : ''">
             <!-- Current user to right -->
             <div class="media-body" [ngClass]="currentUser?.uid == chat?.sender? '': ' mb-3'">

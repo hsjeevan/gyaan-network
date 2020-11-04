@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { take } from 'rxjs/operators';
 })
 export class UserService {
   userDocSub = new ReplaySubject(1);
+  subs = Subscription;
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) { this.getUserDoc(); }
 
@@ -21,8 +22,18 @@ export class UserService {
     }
   }
   getUserRole() {
-    return this.userDocSub.pipe(take(1)).toPromise().then((user: any) => {
-      return user.role;
+
+    return new Promise((resolve, reject) => {
+      this.userDocSub.subscribe((data: any) => {
+        if (data?.role) {
+          resolve(data?.role);
+        }
+      });
     });
+
+
+    // return this.userDocSub.pipe(take(1)).toPromise().then((user: any) => {
+    //   return user?.role;
+    // });
   }
 }
