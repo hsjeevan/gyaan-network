@@ -22,7 +22,7 @@ export class RoleGuard implements CanActivate {
         if (expectedRole === userRole) {
           return Promise.resolve(true);
         }
-        this.router.navigate([`dashboard/${userRole}`]);
+        this.router.navigate([`dashboard/${userRole || 'student'}`]);
         // return Promise.resolve(false);
       });
 

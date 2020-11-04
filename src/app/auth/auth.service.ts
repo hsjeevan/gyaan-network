@@ -31,18 +31,19 @@ export class AuthService {
   async initAuthListener(): Promise<any> {
     await this.afAuth.authState.subscribe(async user => {
       if (user) {
+        this.userService.getUserDoc();
         this.isAuthenticated = true;
         this.userSub.next(user);
         this.authChange.next(true);
-        this.userService.getUserDoc();
         if (this.router.url === '/login' || this.router.url === '/register') {
-          this.router.navigate(['']);
+          setTimeout(() => {
+            this.router.navigate(['']);
+          }, 300);
         }
       } else {
         this.userSub.next(null);
         this.authChange.next(false);
         this.isAuthenticated = false;
-        // this.userService.userDocSub.next('');
         this.router.navigate(['/login']);
       }
     });
@@ -124,7 +125,8 @@ export class AuthService {
       });
   }
   logout() {
-    this.afAuth.signOut()
+    this.userService.userDocSub.next(null);
+    this.afAuth.signOut();
     // .then(() => this.router.navigate(['/login']));
   }
 
